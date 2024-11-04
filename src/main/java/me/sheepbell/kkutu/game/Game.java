@@ -53,7 +53,7 @@ public class Game {
     turnTimer.delete();
     HttpRequester.descriptionCache.clear();
     Player winner = turnManager.nextPlayer();
-    Bukkit.broadcast(winner.name());
+    playWinningEffect(winner);
   }
 
   private void playWinningEffect(Player winner) {

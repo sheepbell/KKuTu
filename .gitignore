@@ -5,6 +5,8 @@
 *.ipr
 *.iws
 
+/src/main/java/me/sheepbell/kkutu/util/PrivateConstant.java
+
 # IntelliJ
 out/
 

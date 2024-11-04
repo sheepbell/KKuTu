@@ -17,12 +17,13 @@ import java.util.HashMap;
 
 public class HttpRequester {
   public static final HashMap<String, String> descriptionCache = new HashMap<>();
-  private static final String API_URL = "https://stdict.korean.go.kr/api/search.do?certkey_no=7027&key=44A243F05A85A1D66F450A364BFCED8B&type_search=search&req_type=json&q=";
+  private static final String API_URL = "https://stdict.korean.go.kr/api/search.do?key=";
+  private static final String API_PARAMETER = "&type_search=search&req_type=json&q=";
 
   public static String request(String word) {
     HttpClient client = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
-      .uri(URI.create(API_URL + word))
+      .uri(URI.create(API_URL + PrivateConstant.API_KEY + API_PARAMETER + word))
       .build();
 
     HttpResponse<String> response = null;

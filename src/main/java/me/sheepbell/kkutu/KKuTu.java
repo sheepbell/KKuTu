@@ -4,7 +4,6 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import me.sheepbell.kkutu.command.KKuTuCommand;
 import me.sheepbell.kkutu.listener.AsyncChatListener;
 import me.sheepbell.kkutu.listener.PlayerJoinListener;
-import me.sheepbell.kkutu.listener.PlayerJumpListener;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,8 +32,7 @@ public class KKuTu extends JavaPlugin {
   private void registerEvents() {
     List<Listener> listeners = List.of(
       new AsyncChatListener(),
-      new PlayerJoinListener(),
-      new PlayerJumpListener()
+      new PlayerJoinListener()
     );
     listeners.forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
   }
