@@ -20,6 +20,7 @@ public class TurnManager {
   private final Player player2;
   private char currentChar;
   private Player currentPlayer;
+  private int turnCount = 0;
 
   public TurnManager(Game game, String startingWord, Player player1, Player player2) {
     this.game = game;
@@ -32,6 +33,10 @@ public class TurnManager {
 
   public char getCurrentChar() {
     return currentChar;
+  }
+
+  public int getTurnCount() {
+    return turnCount;
   }
 
   public boolean isTurn(Player player) {
@@ -53,6 +58,7 @@ public class TurnManager {
     game.getTurnTimer().setDuration(TimerDuration.getTurnDuration(game.getRoundTimer().getLeftDuration()));
     game.getTurnTimer().start();
     showTurnTitle();
+    turnCount++;
   }
 
   public Player nextPlayer() {

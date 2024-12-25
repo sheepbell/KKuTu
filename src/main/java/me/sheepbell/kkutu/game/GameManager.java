@@ -14,12 +14,12 @@ public class GameManager {
     return isPlaying;
   }
 
-  public static void startGame(Player player1, Player player2) {
+  public static void startGame(Player player1, Player player2, boolean isSolo) {
     if (isPlaying) {
       return;
     }
     isPlaying = true;
-    game = new Game("참나", player1, player2);
+    game = new Game("참나", player1, player2, isSolo);
   }
 
   public static void endGame() {

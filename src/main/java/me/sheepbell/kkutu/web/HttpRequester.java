@@ -1,5 +1,7 @@
-package me.sheepbell.kkutu.util;
+package me.sheepbell.kkutu.web;
 
+import me.sheepbell.kkutu.game.GameManager;
+import me.sheepbell.kkutu.util.PrivateConstant;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -16,14 +18,16 @@ import java.net.http.HttpResponse;
 import java.util.HashMap;
 
 public class HttpRequester {
-  public static final HashMap<String, String> descriptionCache = new HashMap<>();
+  public static final HashMap<Integer, String> descriptionCache = new HashMap<>();
   private static final String API_URL = "https://stdict.korean.go.kr/api/search.do?key=";
-  private static final String API_PARAMETER = "&type_search=search&req_type=json&q=";
+  private static final String WORD_PARAMETER = "&type_search=search&req_type=json&q=";
+  private static final String START_PARAMETER = "&req_type=json&method=start&num=100&advanced=y&type2=native,chinese&letter_s=2&letter_e=5&q=";
 
-  public static String request(String word) {
+  public static String request(String word, RequestType type) {
+    String parameter = type == RequestType.WORD ? WORD_PARAMETER : START_PARAMETER;
     HttpClient client = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
-      .uri(URI.create(API_URL + PrivateConstant.API_KEY + API_PARAMETER + word))
+      .uri(URI.create(API_URL + PrivateConstant.API_KEY + parameter + word))
       .build();
 
     HttpResponse<String> response = null;
@@ -33,14 +37,28 @@ public class HttpRequester {
       Bukkit.broadcast(Component.text("API 요청 중 오류가 발생했습니다.", NamedTextColor.RED));
     }
 
-    cache(word, response);
+    cache(response);
 
     return response.body();
   }
 
-  private static void cache(String word, HttpResponse<String> response) {
+  private static void cache(HttpResponse<String> response) {
     if (response != null && !response.body().isEmpty()) {
-      descriptionCache.put(word, getDefinition(response.body()));
+      descriptionCache.put(GameManager.getGame().getTurnManager().getTurnCount(), getDefinition(response.body()));
+    }
+  }
+
+  private static String getWord(String body) {
+    try {
+      JSONParser parser = new JSONParser();
+      JSONObject jsonObject = (JSONObject) parser.parse(body);
+      JSONObject channel = (JSONObject) jsonObject.get("channel");
+      JSONArray items = (JSONArray) channel.get("item");
+      JSONObject item = (JSONObject) items.getFirst();
+      return item.get("word").toString().replace("-", "").replace("^", "");
+    } catch (ParseException e) {
+      Bukkit.broadcast(Component.text("API 응답을 파싱하는 중 오류가 발생했습니다.", NamedTextColor.RED));
+      return null;
     }
   }
 
@@ -57,5 +75,9 @@ public class HttpRequester {
       Bukkit.broadcast(Component.text("API 응답을 파싱하는 중 오류가 발생했습니다.", NamedTextColor.RED));
       return null;
     }
+  }
+
+  public static boolean isCached(String word) {
+    return descriptionCache.containsKey(word);
   }
 }

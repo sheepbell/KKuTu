@@ -1,8 +1,13 @@
 import xyz.jpenilla.resourcefactory.bukkit.BukkitPluginYaml
 
+repositories {
+  gradlePluginPortal()
+  maven("https://repo.papermc.io/repository/maven-public/")
+}
+
 plugins {
   `java-library`
-  id("io.papermc.paperweight.userdev") version "1.7.4"
+  id("io.papermc.paperweight.userdev") version "2.0.0-beta.8"
   id("xyz.jpenilla.run-paper") version "2.3.1"
   id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.2.0"
 }
@@ -18,7 +23,7 @@ java {
 paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 
 dependencies {
-  paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+  paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
 }
 
 tasks {
@@ -43,5 +48,5 @@ bukkitPluginYaml {
   main = "me.sheepbell.kkutu.KKuTu"
   load = BukkitPluginYaml.PluginLoadOrder.STARTUP
   author = "sheepbell"
-  apiVersion = "1.21.1"
+  apiVersion = "1.21.4"
 }

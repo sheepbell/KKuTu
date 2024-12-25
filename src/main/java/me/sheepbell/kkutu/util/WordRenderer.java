@@ -2,6 +2,7 @@ package me.sheepbell.kkutu.util;
 
 import me.sheepbell.kkutu.KKuTu;
 import me.sheepbell.kkutu.game.Game;
+import me.sheepbell.kkutu.web.HttpRequester;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
@@ -20,7 +21,7 @@ public class WordRenderer {
   private static final Sound G = Sound.sound(key, Sound.Source.MASTER, 1, 1.059463F);
 
   public static void render(Game game, String word) {
-    String definition = HttpRequester.descriptionCache.get(word);
+    String definition = HttpRequester.descriptionCache.get(game.getTurnManager().getTurnCount());
     int delayPerCharacter = 20 / word.length();
 
     AtomicInteger index = new AtomicInteger(1);
