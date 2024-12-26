@@ -3,6 +3,8 @@ package me.sheepbell.kkutu.game;
 import me.sheepbell.kkutu.KKuTu;
 import me.sheepbell.kkutu.util.TimerDuration;
 import me.sheepbell.kkutu.util.WordRenderer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -21,6 +23,7 @@ public class TurnManager {
   private char currentChar;
   private Player currentPlayer;
   private int turnCount = 0;
+  private Title title;
 
   public TurnManager(Game game, String startingWord, Player player1, Player player2) {
     this.game = game;
@@ -37,6 +40,10 @@ public class TurnManager {
 
   public int getTurnCount() {
     return turnCount;
+  }
+
+  public Title getTitle() {
+    return title;
   }
 
   public boolean isTurn(Player player) {
@@ -69,7 +76,10 @@ public class TurnManager {
   }
 
   private void showTurnTitle() {
-    Title title = Title.title(text(currentChar), empty(), Title.Times.times(Duration.ZERO, Duration.ofMinutes(10), Duration.ZERO));
-    game.getPlayers().forEach(player -> player.showTitle(title));
+    game.getPlayers().forEach(player -> {
+    Component subtitle = isTurn(player) ? text("당신의 차례! 다음 단어를 입력하세요", NamedTextColor.GRAY) : empty();
+    title = Title.title(text(currentChar), subtitle, Title.Times.times(Duration.ZERO, Duration.ofMinutes(10), Duration.ZERO));
+      player.showTitle(title);
+    });
   }
 }

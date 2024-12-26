@@ -6,6 +6,7 @@ import me.sheepbell.kkutu.web.HttpRequester;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -34,7 +35,7 @@ public class WordRenderer {
 
       game.getPlayers().forEach(player -> {
         Title.Times times = Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ZERO);
-        Title title = Title.title(Component.text(word.substring(0, index.get())), Component.text(definition), times);
+        Title title = Title.title(Component.text(word.substring(0, index.get())), Component.text(definition, NamedTextColor.GRAY), times);
         player.showTitle(title);
         player.playSound(F, Sound.Emitter.self());
       });

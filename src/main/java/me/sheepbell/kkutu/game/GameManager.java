@@ -2,7 +2,10 @@ package me.sheepbell.kkutu.game;
 
 import org.bukkit.entity.Player;
 
+import java.util.Random;
+
 public class GameManager {
+  private static final Random RANDOM = new Random();
   private static Game game;
   private static boolean isPlaying = false;
 
@@ -19,7 +22,9 @@ public class GameManager {
       return;
     }
     isPlaying = true;
-    game = new Game("참나", player1, player2, isSolo);
+    String[] startingWords = {"가", "나", "다", "라", "마"};
+    String startingWord = startingWords[RANDOM.nextInt(startingWords.length)];
+    game = new Game(startingWord, player1, player2, isSolo);
   }
 
   public static void endGame() {

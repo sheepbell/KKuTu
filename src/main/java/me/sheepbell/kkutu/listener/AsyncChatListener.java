@@ -42,8 +42,13 @@ public class AsyncChatListener implements Listener {
       return;
     }
 
+    if (message.isBlank() || message.contains(" ")) {
+      notifyWrongMessage(message, false);
+      return;
+    }
+
     if (HttpRequester.isCached(message)) {
-      notifyWrongMessage(player, message, true);
+      notifyWrongMessage(message, true);
       return;
     }
 
@@ -53,15 +58,19 @@ public class AsyncChatListener implements Listener {
         SCHEDULER.runTaskLater(PLUGIN, () -> Bot.autoPlay(message), 80L);
       }
     } else {
-      notifyWrongMessage(player, message, false);
+      notifyWrongMessage(message, false);
     }
   }
 
-  private void notifyWrongMessage(Player player, String message, boolean cached) {
+  private void notifyWrongMessage(String message, boolean cached) {
     Title.Times times = Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ZERO);
-    Title title = Title.title(Component.text(message, NamedTextColor.RED), Component.empty(), times);
+    Component subtitle = cached ? Component.text("이미 사용된 단어입니다.", NamedTextColor.RED) : Component.empty();
+    Title title = Title.title(Component.text(message, NamedTextColor.RED), subtitle, times);
     Sound sound = Sound.sound(Key.key("block.anvil.land"), Sound.Source.MASTER, 1, 1);
-//    player.showTitle(title);
-    player.playSound(sound, Sound.Emitter.self());
+    GameManager.getGame().getPlayers().forEach(player -> {
+      player.showTitle(title);
+      player.playSound(sound, Sound.Emitter.self());
+      SCHEDULER.runTaskLater(PLUGIN, () -> player.showTitle(GameManager.getGame().getTurnManager().getTitle()), 20L);
+    });
   }
 }
